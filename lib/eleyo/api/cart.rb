@@ -18,7 +18,7 @@ module Eleyo
         self.auth = self.access_token.auth
 
         raise API::InitializerError.new(:access_token, "can't be blank") if self.access_token.nil?
-        raise API::InitializerError.new(:access_token, "must be of class type Eleyo::API::Auth::AccessToke") if !self.access_token.is_a?(Eleyo::API::Auth::AccessToken)
+        raise API::InitializerError.new(:access_token, "must be of class type Eleyo::API::Auth::AccessToken") if !self.access_token.is_a?(Eleyo::API::Auth::AccessToken)
       end
 
       def get(uuid = nil)
