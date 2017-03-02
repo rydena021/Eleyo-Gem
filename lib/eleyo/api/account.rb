@@ -22,9 +22,10 @@ module Eleyo
         raise API::InitializerError.new(:access_token, "must be of class type Eleyo::API::Auth::AccessToken") if self.access_token and !self.access_token.is_a?(Eleyo::API::Auth::AccessToken)
       end
       
-      def list(options = {})
+      def list(params = {})
         request = HTTPI::Request.new
         request.url = "#{self.class.server_uri}/api/v1/users"
+        request.query = URI.encode_www_form(params)
         request.headers = self.generate_headers
 
         response = HTTPI.get(request)
