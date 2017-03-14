@@ -1,6 +1,9 @@
 module Eleyo
   module API
     class Auth
+      class InvalidGrantError < API::Error; end
+      class InvalidClientError < API::Error; end
+    
       class AccessToken
         attr_accessor :token, :auth
         
@@ -76,7 +79,17 @@ module Eleyo
         if !response.error?
           return AccessToken.new(:token => JSON.parse(response.body)['access_token'], :auth => self)
         else
-          raise(API::Error.new(response.code, response.body))
+          begin
+            resp_data = JSON.parse(response.body)
+          rescue
+          end
+          if resp_data and resp_data["error"] == "invalid_grant"
+            raise(API::Auth::InvalidGrantError.new(response.code, response.body))
+          elsif resp_data and resp_data["error"] == "invalid_client"
+            raise(API::Auth::InvalidClientError.new(response.code, response.body))
+          else
+            raise(API::Error.new(response.code, response.body))
+          end
         end
       end
       

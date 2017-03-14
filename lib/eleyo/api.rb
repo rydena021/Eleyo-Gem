@@ -21,6 +21,10 @@ module Eleyo
       attr_accessor :http_status_code
       def initialize(code, message)
         self.http_status_code = code.to_i
+        begin
+          self.json = JSON.parse(message)
+        rescue
+        end
         
         super "(#{code}) #{message}"
       end
