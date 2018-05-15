@@ -4,7 +4,7 @@ module Eleyo
       def self.server_uri
         "https://banks.switchboard.io"
       end
-      
+
       def get(routing_number)
         routing_number = URI.escape(routing_number.to_s)
 
@@ -20,7 +20,7 @@ module Eleyo
           raise(API::Error.new(response.code, response.body))
         end
       end
-      
+
     end
   end
 end

@@ -3,19 +3,19 @@ module Eleyo
     class Auth
       class InvalidGrantError < API::Error; end
       class InvalidClientError < API::Error; end
-    
+
       class AccessToken
         attr_accessor :token, :auth
-        
+
         def initialize(options = {})
           self.token = options[:token]
           self.auth = options[:auth]
-          
+
           raise API::InitializerError.new(:token, "can't be blank") if self.token.to_s.empty?
           raise API::InitializerError.new(:auth, "can't be blank") if self.auth.nil?
           raise API::InitializerError.new(:auth, "must be of class type Eleyo::API::Auth") if !self.auth.is_a?(Eleyo::API::Auth)
         end
-        
+
         def user_data(params = {})
           if @user_data.nil? and !@token.nil?
             acc = Eleyo::API::Account.new(:access_token => self)
@@ -24,19 +24,20 @@ module Eleyo
           @user_data
         end
       end
-      
+
       def self.server_uri
         if Eleyo::API.standardmode?
-          "https://login.feepay.switchboard.io"
+          "sso.reg.eleyo.com"
         elsif Eleyo::API.testmode?
-          "https://login.pre.feepay.switchboard.io"
+          "sso.reg.eleyo.green"
         elsif Eleyo::API.devmode?
-          "http://login.localfeepay.switchboard.io:5678"
+          host = "#{`scutil --get LocalHostName`.downcase.strip}.local"
+          "sso.reg.eleyo.#{host}"
         end
       end
-            
+
       attr_accessor :client_id, :client_secret, :redirect_uri, :js_callback, :district_subdomain, :current_user_uuid, :login_mechanism, :element
-      
+
       def initialize(options = {})
         self.client_id = options[:client_id]
         self.client_secret = options[:client_secret]
@@ -55,11 +56,11 @@ module Eleyo
       def authorization_url
         %(#{self.class.server_uri}/authorize?client_id=#{self.client_id}&redirect_uri=#{self.redirect_uri}&district=#{self.district_subdomain})
       end
-      
+
       def registration_url
         %(#{self.class.server_uri}/register?client_id=#{self.client_id}&redirect_uri=#{self.redirect_uri}&district=#{self.district_subdomain})
       end
-      
+
       def access_token(code)
         data = {
           :code => code,
@@ -68,14 +69,14 @@ module Eleyo
           :client_secret => self.client_secret,
           :client_id => self.client_id
         }
-        
+
         request = HTTPI::Request.new
         request.url = "#{self.class.server_uri}/access_token"
         request.body = data
         request.headers = {'User-Agent' => USER_AGENT}
 
         response = HTTPI.post(request)
-        
+
         if !response.error?
           return AccessToken.new(:token => JSON.parse(response.body)['access_token'], :auth => self)
         else
@@ -92,7 +93,7 @@ module Eleyo
           end
         end
       end
-      
+
       def javascript
         options = {
           district: self.district_subdomain,
@@ -107,7 +108,7 @@ module Eleyo
         }
         return %(new SwitchBoardIOLogin(#{options.to_json});)
       end
-      
+
     end
   end
 end
