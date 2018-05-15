@@ -27,12 +27,12 @@ module Eleyo
 
       def self.server_uri
         if Eleyo::API.standardmode?
-          "sso.reg.eleyo.com"
+          "https://sso.reg.eleyo.com"
         elsif Eleyo::API.testmode?
-          "sso.reg.eleyo.green"
+          "https://sso.reg.eleyo.green"
         elsif Eleyo::API.devmode?
           host = "#{`scutil --get LocalHostName`.downcase.strip}.local"
-          "sso.reg.eleyo.#{host}"
+          "http://sso.reg.eleyo.#{host}"
         end
       end
 

@@ -3,12 +3,12 @@ module Eleyo
     class Account
       def self.server_uri
         if Eleyo::API.standardmode?
-          "acc.reg.eleyo.com"
+          "https://acc.reg.eleyo.com"
         elsif Eleyo::API.testmode?
-          "acc.reg.eleyo.green"
+          "https://acc.reg.eleyo.green"
         elsif Eleyo::API.devmode?
           host = "#{`scutil --get LocalHostName`.downcase.strip}.local"
-          "acc.reg.eleyo.#{host}"
+          "http://acc.reg.eleyo.#{host}"
         end
       end
 

@@ -3,12 +3,12 @@ module Eleyo
     class Cart
       def self.server_uri
         if Eleyo::API.standardmode?
-          "cart.reg.eleyo.com"
+          "https://cart.reg.eleyo.com"
         elsif Eleyo::API.testmode?
-          "cart.reg.eleyo.green"
+          "https://cart.reg.eleyo.green"
         elsif Eleyo::API.devmode?
           host = "#{`scutil --get LocalHostName`.downcase.strip}.local"
-          "cart.reg.eleyo.#{host}"
+          "http://cart.reg.eleyo.#{host}"
         end
       end
 
