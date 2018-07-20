@@ -12,14 +12,14 @@ module Eleyo
         request.headers = self.generate_headers
 
         response = HTTPI.get(request)
-        
+
         if !response.error?
           JSON.parse(response.body)
         else
           raise(API::Error.new(response.code, response.body))
         end
       end
-      
+
       def lookup_state_student_id(params)
         # accepted lookup attributes
         # firstname & lastname & birthdate
@@ -30,7 +30,7 @@ module Eleyo
         request.headers = self.generate_headers
 
         response = HTTPI.get(request)
-        
+
         if !response.error?
           JSON.parse(response.body)
         else

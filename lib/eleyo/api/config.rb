@@ -3,11 +3,12 @@ module Eleyo
     class Config
       def self.server_uri
         if Eleyo::API.standardmode?
-          "https://config.feepay.switchboard.io"
+          "https://config.reg.eleyo.com"
         elsif Eleyo::API.testmode?
-          "https://config.pre.feepay.switchboard.io"
+          "https://config.reg.eleyo.green"
         elsif Eleyo::API.devmode?
-          "http://config.localfeepay.switchboard.io:6789"
+          host = "#{`scutil --get LocalHostName`.downcase.strip}.local"
+          "http://config.reg.eleyo.#{host}"
         end
       end
 
