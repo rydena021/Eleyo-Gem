@@ -2,7 +2,7 @@ module Eleyo
   module API
     class BankInfo
       def self.server_uri
-        "https://banks.switchboard.io"
+        "https://banks.api.eleyo.com"
       end
 
       def get(routing_number)
