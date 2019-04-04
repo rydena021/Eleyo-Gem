@@ -54,6 +54,21 @@ module Eleyo
         end
       end
 
+      def list(params = {})
+        request = HTTPI::Request.new
+        request.url = "#{self.class.server_uri}/api/v1/customers"
+        request.query = URI.encode_www_form(params)
+        request.headers = self.generate_headers
+
+        response = HTTPI.get(request)
+
+        if !response.error?
+          JSON.parse(response.body)
+        else
+          raise(API::Error.new(response.code, response.body))
+        end
+      end
+
       protected
 
       def generate_headers
