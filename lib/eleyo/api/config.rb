@@ -56,12 +56,12 @@ module Eleyo
 
       def list(params = {})
         request = HTTPI::Request.new
-        request.url = "#{self.class.server_uri}/api/v1/customers.json"
+        request.url = "#{self.class.server_uri}/api/v1/customers"
         request.query = URI.encode_www_form(params)
         request.headers = self.generate_headers
-
+        puts request
         response = HTTPI.get(request)
-
+        puts response
         if !response.error?
           JSON.parse(response.body)
         else
