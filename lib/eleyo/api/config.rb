@@ -56,7 +56,7 @@ module Eleyo
 
       def list(params = {})
         request = HTTPI::Request.new
-        request.url = "#{self.class.server_uri}/api/v1/customers"
+        request.url = "#{self.class.server_uri}/v1/customers"
         request.query = URI.encode_www_form(params)
         request.headers = self.generate_headers
         puts request
